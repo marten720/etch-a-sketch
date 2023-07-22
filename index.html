@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link rel="stylesheet" type="text/css" href="style.css" />
@@ -11,16 +12,44 @@
     <body>
 
         <div id="page">
-            <!-- will ask the user for the size -->
-            <h1>Etch-a-Sketch</h1>
-            <label for="quantity">Pick a new size for the grid:</label>
-            <input type="number" id="quantity" name="quantity" placeholder="1 - 100"/>
-            <button class="reset">Reset</button>
+            <div class="title"><h1>Etch-a-Sketch</h1></div>
+
+            <div class="top">
+                <div class="mode">Coloring</div>
+                <div class="currColor">Currently Selected: Black</div>
+
+                <div class="top-bottom">
+                    <input 
+                        class="text-box"
+                        type="text" 
+                        placeholder="1 - 100"
+                        onchange="newGrid(this.value)"
+                    />
+                    <button class="set-size">Set Size</button>
+                </div> 
+            </div>
+
+            <div class="center">
+                <div class="colors">
+                    <button class="reset pause" onclick="pause()">Pause</button>
+                    <button class="color black" onclick="changeColor('black')"></button>
+                    <button class="color blue" onclick="changeColor('blue')"></button>
+                    <button class="color red" onclick="changeColor('red')"></button>
+                    <button class="color green" onclick="changeColor('green')"></button>
+                    <button class="color yellow" onclick="changeColor('yellow')"></button>
+                    <button class="color purple" onclick="changeColor('purple')"></button>
+                    <button class="color brown" onclick="changeColor('brown')"></button>
+                    <button class="color eraser" onclick="changeColor('white')"></button>
+                    <button class="reset" onclick="resetBoard()">Reset</button>
+                </div>
+
+                <div id="container"></div> 
+            </div>
         </div>
 
-        <div id="container">
-            <!-- will contain the actual grid -->
-        </div>  
+        <div class="footer">
+            <p>Copyright © <script>document.write(new Date().getFullYear())</script> marten720</p>
+        </div>
 
         <script src="app.js"></script>
     </body>

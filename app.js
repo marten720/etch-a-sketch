@@ -1,53 +1,77 @@
-const container = document.getElementById("container"); // accessing container
-const newSize = document.getElementById("quantity"); // new size of grid
-const btn = document.getElementsByClassName("reset"); // might not work because reset is a class not id!!!!!!!
+let color = "black";
+let click = true;
 
 // creating new grid
 function createGrid(num) {
-    container.style.setProperty('--grid-rows', num);
-    container.style.setProperty('--grid-cols', num);
-    for (c = 0; c < num ** 2; c++) {
-      let cell = document.createElement("div");
-      container.appendChild(cell).className = "grid-item";
-    };
+    let container = document.querySelector("#container");
+    let items = document.querySelectorAll(".grid-item");
+    items.forEach((item) => item.remove());
 
-    hoverColor();
+    container.style.gridTemplateRows = `repeat(${num}, 1fr)`;
+    container.style.gridTemplateColumns = `repeat(${num}, 1fr)`;
+
+    for (let c = 0; c < num * num; c++) {
+        let cell = document.createElement("div");
+
+        // changes color when hovering over grid item
+        cell.addEventListener("mouseover", coloring);
+        cell.classList.add("grid-item");
+        container.insertAdjacentElement("beforeend", cell);
+    };
 };
 
-// changes color when hovering over grid item
-function hoverColor() {
-    let items = document.querySelectorAll(".grid-item");
-    items.forEach(item => {
-        item.addEventListener("mouseover", () => {
-        item.style.backgroundColor = "black";
+createGrid(16);
 
-        // changing opacity by 10%
-        if(parseFloat(item.style.opacity)) {
-            item.style.opacity = parseFloat(item.style.opacity) + 0.1;
-            } else {
-            item.style.opacity = 0.1;
-            }
-        });
-    });
+function newGrid(num) {
+    if (num >= 1 && num <= 100) // ensures the site doesn't crash due to invalid num
+        createGrid(num);
 }
-  
-  // initializing default grid
-  createGrid(16, 16);
 
-function newGrid() {
-    if (newSize.value < 1 || newSize.value > 100)
-        newSize.value("Incorrect value!");
-    else {
-        eraseGrid();
-        createGrid(newSize.value);
+function coloring() {
+    if (click) {
+        if (color === "white")
+            this.style.opacity -= 0.1;
+
+        else {
+            // changing opacity by 10% if color hasn't been changed
+            if (this.style.backgroundColor === color) {
+                if(parseFloat(this.style.opacity)) {
+                    this.style.opacity = parseFloat(this.style.opacity) + 0.2;
+                } else {
+                    this.style.opacity = 0.2;
+                }
+            }
+
+            else {
+                this.style.backgroundColor = color;
+                this.style.opacity = 0.2;
+            }
+        }
     }
 }
 
-function eraseGrid() {
+function resetBoard() {
     let items = document.querySelectorAll(".grid-item");
-    items.forEach(item => {
-        item.style.backgroundColor = "white";
-    });
+    items.forEach((item) => item.style.opacity = 0);
 }
 
-btn[0].addEventListener("click", newGrid);
+function changeColor(col) {
+    color = col;
+
+    if (color === "white")
+        document.querySelector(".currColor").textContent = "Currently Selected: Eraser";
+    else
+        document.querySelector(".currColor").textContent = `Currently Selected: ${color.charAt(0).toUpperCase() + color.slice(1)}`;
+}
+
+document.querySelector(".pause").addEventListener("click", (e) => {
+    click = !click;
+    if (click) {
+        document.querySelector(".mode").textContent = "Mode: Coloring";
+        document.querySelector(".pause").textContent = "Pause";
+    }
+    else {
+        document.querySelector(".mode").textContent = "Mode: Not Coloring";
+        document.querySelector(".pause").textContent = "Continue";
+    }
+});
